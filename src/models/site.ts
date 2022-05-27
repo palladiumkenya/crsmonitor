@@ -7,4 +7,8 @@ export interface Site {
     activeRecords?: any;
     status?: string;
     responseStatusDate?: Date;
+    arrivedAgo?: string;
+    responseAgo: string;
 }
+
+
