@@ -16,12 +16,20 @@ const SiteListTransmitted:FC<Props>=({transmittedSites,loadError})=> {
         loadError(rowData.siteCode);
     }
 
+    const isFalied=(rowData:any):boolean=> {
+        return rowData.status == 'Failed';
+    }
+
     const actionBodyTemplate = (rowData:any) => {
-        return (
-            <React.Fragment>
-                <Button icon="pi pi-list" className="p-button-rounded p-button-success mr-2" onClick={() => handleLoadError(rowData)} />
-            </React.Fragment>
-        );
+        if (isFalied(rowData))
+            return (
+                <React.Fragment>
+                    <Button icon="pi pi-exclamation-circle" className="p-button p-button-danger mr-2"
+                            onClick={() => handleLoadError(rowData)}/>
+                </React.Fragment>
+            );
+
+        return <></>
     }
 
     return (
