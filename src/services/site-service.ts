@@ -1,14 +1,25 @@
 import {Site} from "../models/site";
 import axios, {AxiosInstance, AxiosResponse} from "axios";
 import {TransmittedSite} from "../models/transmitted-site";
+import UserService from "./user-service";
 
 class SiteService {
     client: AxiosInstance;
 
     constructor() {
+
         this.client = axios.create({
             baseURL:process.env.REACT_APP_CRS_API_URL
         });
+        let userService=new UserService();
+        // check if user is signed in
+        userService.getUser().then(user => {
+            if (user && !user.expired) {
+                // Set the authorization header for axios
+                this.client.defaults.headers.common['Authorization'] = 'Bearer ' + user.access_token;
+            }
+        });
+
     }
 
     getPendingSites(): Promise<AxiosResponse<Site[]>> {

@@ -8,7 +8,7 @@ import {useNavigate } from "react-router-dom";
 const service=new SiteService();
 
 const SiteManger:FC=()=> {
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
     const [transmit, setTransmit] = useState(false);
     const [loading, setLoading] = useState(true);
     const [errors, setErrors] = useState<string[]>([]);
@@ -65,7 +65,7 @@ const SiteManger:FC=()=> {
     }
 
     const onLoadError =  (siteCode: any) => {
-        navigate(`/site/${siteCode}`);
+       // navigate(`/site/${siteCode}`);
     }
 
     return (

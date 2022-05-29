@@ -20,17 +20,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-      <BrowserRouter>
-          <div>
-              <Header/>
-              <Routes>
-                  <Route path="/" element={<App />} />
-                  <Route path="/site/:siteCode" element={<SiteShowcase />}/>
-                  <Route element={<App />} />
-              </Routes>
-              <Footer/>
-          </div>
-      </BrowserRouter>
+      <App/>
   </React.StrictMode>
 );
 
