@@ -1,13 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import UserService from "../../services/user-service";
 import {User} from "oidc-client";
 import {Button} from "primereact/button";
+import {UserContext} from "../App";
 
-
-
+const scv=new UserService();
 
 const Header=()=> {
-    const [user,setUser]=useState<User>()
+    const authUser = useContext(UserContext);
+
+    /*const [user,setUser]=useState<User>()
     useEffect(()=>{
         (async ()=>{
 
@@ -25,20 +27,19 @@ const Header=()=> {
         })();
         return () => {
         };
-    },[])
+    },[])*/
 
     const UserInfo=()=>{
-        const scv=new UserService();
-        if(user)
+        if(authUser.isAuthenticated)
         {
-            return <Button onClick={()=>scv.logout()}> Log Out</Button>
+            return <Button onClick={()=>scv.logout()}> Log Out {authUser.userName}</Button>
         }
         return <Button onClick={()=>scv.login()}>Log In</Button>
     }
 
     return (
         <header>
-            <h1>DWAPI Client Registry Upload Tracker {user?.access_token} </h1>
+            <h1>DWAPI Client Registry Upload Tracker</h1>
             <UserInfo/>
             <hr/>
 

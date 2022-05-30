@@ -1,9 +1,11 @@
-import React, {FC, useState} from "react";
+import React, {FC, useContext, useState} from "react";
 import {Site} from "../../models/site";
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 import {Button} from "primereact/button";
 import {Toolbar} from "primereact/toolbar";
+import {UserContext} from "../App";
+import {Link} from "react-router-dom";
 
 interface Props {
     pendingSites: Site[];
@@ -11,6 +13,7 @@ interface Props {
 }
 
 const SiteListPending:FC<Props>=({pendingSites,transmitSites})=> {
+    const authUser = useContext(UserContext);
     const [selectedSites, setSelectedSites] = useState<any>(null);
     const [transmitLabel, setTransmitLabel] = useState('Transmit Pending');
 
@@ -33,12 +36,14 @@ const SiteListPending:FC<Props>=({pendingSites,transmitSites})=> {
 
     const leftContents = (
         <React.Fragment>
-            <Button label="Transmit" icon="pi pi-upload" className="p-button-success" onClick={() => handleTransmit()}/>
+            <Button hidden={!authUser.isAdmin} label="Transmit" icon="pi pi-upload" className="p-button-success" onClick={() => handleTransmit()}/>
         </React.Fragment>
     );
 
     return (
         <>
+            <Link to="/">Home</Link>
+
             <h2>Pending Sites</h2>
             {pendingSites?.length > 0 &&<Toolbar left={leftContents} />}
 

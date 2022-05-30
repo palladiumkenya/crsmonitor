@@ -4,6 +4,7 @@ import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 import {Dialog} from "primereact/dialog";
 import {Button} from "primereact/button";
+import {Link} from "react-router-dom";
 
 interface Props {
     transmittedSites: Site[]
@@ -33,6 +34,7 @@ const SiteListTransmitted:FC<Props>=({transmittedSites,loadError})=> {
 
     return (
         <>
+            <Link to="/manage">Mangage</Link>
             <h2>Transmitted Sites</h2>
             <DataTable value={transmittedSites}>
                 <Column field="siteCode" header="MFL Code"></Column>
