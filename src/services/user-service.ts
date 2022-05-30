@@ -1,4 +1,4 @@
-import {Log, User, UserManager} from "oidc-client";
+import {Log, SignoutResponse, User, UserManager} from "oidc-client";
 
 const config = {
     authority: process.env.REACT_APP_CRS_AUTHORITY,
@@ -28,18 +28,27 @@ class UserService {
         return this.userManager.signinRedirect();
     }
 
+
+    public renewToken(): Promise<User> {
+        return this.userManager.signinSilent();
+    }
+
     public logout(): Promise<void> {
         return this.userManager.signoutRedirect();
     }
+
     public  isAuthenticated() {
         let loggedIn = false;
-        let user:any;
+        console.log('checking user')
 
-        this.userManager.getUser().then((r) => user = r);
-        console.log('user',user);
-        if (user && !user?.expired) {
-            loggedIn = true;
-        }
+        this.getUser().then((user)=>{
+            if (user&&!user.expired)
+            {
+                loggedIn=true;
+                console.log('loggedin',user)
+            }
+        })
+        console.log('not loggedin')
         return loggedIn;
     }
 }

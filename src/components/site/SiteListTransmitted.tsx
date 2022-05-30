@@ -16,19 +16,18 @@ const SiteListTransmitted:FC<Props>=({transmittedSites,loadError})=> {
         loadError(rowData.siteCode);
     }
 
-    const isFalied=(rowData:any):boolean=> {
+    const isFailed=(rowData:any):boolean=> {
         return rowData.status == 'Failed';
     }
 
     const actionBodyTemplate = (rowData:any) => {
-        if (isFalied(rowData))
+        if (isFailed(rowData))
             return (
                 <React.Fragment>
                     <Button icon="pi pi-exclamation-circle" className="p-button p-button-danger mr-2"
                             onClick={() => handleLoadError(rowData)}/>
                 </React.Fragment>
             );
-
         return <></>
     }
 
@@ -40,6 +39,7 @@ const SiteListTransmitted:FC<Props>=({transmittedSites,loadError})=> {
                 <Column field="name" header="Name"></Column>
                 <Column field="arrivedAgo" header="Uploaded"></Column>
                 <Column field="recieved" header="Clients"></Column>
+                <Column field="activeRecords" header="Active Clients"></Column>
                 <Column field="status" header="Status"></Column>
                 <Column field="responseAgo" header="Transmitted"></Column>
                 <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '8rem' }}></Column>

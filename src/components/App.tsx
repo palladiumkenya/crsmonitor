@@ -3,11 +3,12 @@ import './App.css';
 import Header from "./layout/Header";
 import Footer from "./layout/Footer";
 import SiteManger from "./site/SiteManger";
-import {BrowserRouter, Link, Outlet, Route, Routes} from "react-router-dom";
+import {HashRouter,  Link, Outlet, Route, Routes} from "react-router-dom";
 import UserService from "../services/user-service";
 import SiteShowcase from "./site/SiteShowcase";
 import {GuardedRoute, GuardProvider} from "react-router-guards";
 import NotFound from "./NotFound";
+import SiteReport from "./site/SiteReport";
 
 
 const userService = new UserService();
@@ -22,12 +23,13 @@ const App=()=> {
     return (
         <div>
             <Header/>
-            <BrowserRouter>
+            <HashRouter>
                 <Routes>
-                    <Route path="/" element={<SiteManger/>}/>
+                    <Route path="/" element={<SiteReport/>}/>
                     <Route path="/site/:siteCode" element={<SiteShowcase/>}/>
+                    <Route path="/manage" element={<SiteManger/>}/>
                 </Routes>
-            </BrowserRouter>
+            </HashRouter>
             <Footer/>
         </div>
     );
