@@ -32,7 +32,6 @@ const SiteManger:FC=()=> {
 
     const onTransmitSites = async (siteCodes: any[]) => {
         setTransmit(false);
-        siteCodes.map((s) => (console.log('TRANSMITTING', s)));
 
         try {
             await service.generateSiteTransfer();

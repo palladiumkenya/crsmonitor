@@ -29,7 +29,6 @@ const SiteListPending:FC<Props>=({pendingSites,transmitSites})=> {
 
     const handleSelection = (site:any) => {
         setSelectedSites(site);
-        console.log(selectedSites);
     }
 
     const leftContents = (

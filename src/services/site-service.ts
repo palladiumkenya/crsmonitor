@@ -7,15 +7,12 @@ class SiteService {
     client: AxiosInstance;
 
     constructor() {
-
         this.client = axios.create({
             baseURL:process.env.REACT_APP_CRS_API_URL
         });
         let userService=new UserService();
-        // check if user is signed in
         userService.getUser().then(user => {
             if (user && !user.expired) {
-                // Set the authorization header for axios
                 this.client.defaults.headers.common['Authorization'] = 'Bearer ' + user.access_token;
             }
         });
@@ -40,7 +37,6 @@ class SiteService {
 
     transferSites(siteCodes:number[]): Promise<AxiosResponse> {
         const body={siteCodes}
-        console.log(body);
         return this.client.post<number[]>('/App/DumpSite',body)
     }
 

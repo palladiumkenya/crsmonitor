@@ -6,9 +6,8 @@ const config = {
     redirect_uri: process.env.REACT_APP_CRS_REDIRECT_URI,
     response_type: process.env.REACT_APP_CRS_RESPONSE_TYPE,
     scope: process.env.REACT_APP_CRS_SCOPE,
-    post_logout_redirect_uri: process.env.REACT_APP_CRS_POST_LOGOUT_REDIRECT_URI,
-    loadUserInfo: true,
-    monitorSession: true
+    // silent_redirect_uri: process.env.REACT_APP_CRS_SILENT_REDIRECT_URI,
+    post_logout_redirect_uri: process.env.REACT_APP_CRS_POST_LOGOUT_REDIRECT_URI
 };
 
 class UserService {
@@ -39,16 +38,12 @@ class UserService {
 
     public  isAuthenticated() {
         let loggedIn = false;
-        console.log('checking user')
-
         this.getUser().then((user)=>{
             if (user&&!user.expired)
             {
                 loggedIn=true;
-                console.log('loggedin',user)
             }
         })
-        console.log('not loggedin')
         return loggedIn;
     }
 }
