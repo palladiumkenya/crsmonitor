@@ -1,4 +1,4 @@
-import {Log, SignoutResponse, User, UserManager} from "oidc-client";
+import {Log, User, UserManager} from "oidc-client";
 
 const config = {
     authority: process.env.REACT_APP_CRS_AUTHORITY,
