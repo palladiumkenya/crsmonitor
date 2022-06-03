@@ -39,6 +39,9 @@ const SiteListTransmitted:FC<Props>=({transmittedSites,loadError})=> {
             <DataTable value={transmittedSites}>
                 <Column field="siteCode" header="MFL Code"></Column>
                 <Column field="name" header="Name"></Column>
+                <Column field="county" header="County"></Column>
+                <Column field="agency" header="Agency"></Column>
+                <Column field="partner" header="Partner"></Column>
                 <Column field="arrivedAgo" header="Uploaded"></Column>
                 <Column field="recieved" header="Clients"></Column>
                 <Column field="activeRecords" header="Active Clients"></Column>

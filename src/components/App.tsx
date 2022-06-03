@@ -30,7 +30,6 @@ const App=()=> {
         (async ()=>{
             const user=await scv.getUser();
             if (user) {
-                console.log('>>>>>', user);
                 setAuthUser({
                     userName: user?.profile.name,
                     isAdmin: user?.profile.role && user?.profile.role == 'UpiManager',
@@ -50,7 +49,7 @@ const App=()=> {
     return (
         <UserContext.Provider value={authUser}>
             <Header/>
-            <BrowserRouter>
+            <BrowserRouter basename={process.env.REACT_APP_CRS_BASENAME}>
                 <Routes>
                     <Route path="/" element={<SiteReport/>}/>
                     <Route path="/site/:siteCode" element={<SiteShowcase/>}/>

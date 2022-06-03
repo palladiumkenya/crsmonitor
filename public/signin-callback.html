@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Authentification callback processing..</title>
+    <title>DWAPI Client Registry Upload Tracker</title>
 </head>
 
 <body>
@@ -10,12 +10,12 @@
         You need to enable JavaScript to run this app.
     </noscript>
 
-    <h1>Authentification callback processing...</h1>
+    <img src="redirecting.gif">
 
     <script src="oidc-client.min.js"></script>
     <script>
         new Oidc.UserManager().signinRedirectCallback().then(function (user) {
-            window.location = "/";
+            window.location = "manage";
         }).catch(function (e) {
             console.error(e);
         });

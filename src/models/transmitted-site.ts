@@ -6,4 +6,7 @@ export interface TransmittedSite {
     records?: number;
     activeRecords?: number;
     transmissionLogs?: TransmissionLog[];
+    county?: string;
+    agency?: string;
+    partner?: string;
 }

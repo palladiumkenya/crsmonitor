@@ -9,6 +9,9 @@ export interface Site {
     responseStatusDate?: Date;
     arrivedAgo?: string;
     responseAgo: string;
+    county?: string;
+    agency?: string;
+    partner?: string;
 }
 
 
