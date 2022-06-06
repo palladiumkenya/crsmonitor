@@ -1,4 +1,4 @@
-import React, {FC, useContext, useRef, useState} from "react";
+import React, {FC, FormEvent, useContext, useRef, useState} from "react";
 import {Site} from "../../models/site";
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
@@ -6,7 +6,7 @@ import {Button} from "primereact/button";
 import {Toolbar} from "primereact/toolbar";
 import {UserContext} from "../App";
 import {Link} from "react-router-dom";
-import {FilterMatchMode} from "primereact/api";
+import {InputText} from "primereact/inputtext";
 
 interface Props {
     pendingSites: Site[];
@@ -20,6 +20,7 @@ const SiteListPending:FC<Props>=({pendingSites,transmitSites,loadingData,transmi
     const authUser = useContext(UserContext);
     const [selectedSites, setSelectedSites] = useState<any>(null);
     const dt: any = useRef(null);
+    const [globalFilter, setGlobalFilter] = useState<string>();
 
 
     const handleTransmit = () => {
@@ -45,6 +46,17 @@ const SiteListPending:FC<Props>=({pendingSites,transmitSites,loadingData,transmi
         </React.Fragment>
     );
 
+    const rightContents = (
+        <React.Fragment>
+            <span>
+                    <i className="pi pi-search"/>
+                     <InputText type="search"
+                                onInput={(e: FormEvent<HTMLInputElement>) => setGlobalFilter(e.currentTarget.value)}
+                                placeholder="Search..." style={{backgroundColor: "white"}}/>
+                </span>
+        </React.Fragment>
+    );
+
     const exportCSV = () => {
         dt.current.exportCSV();
     }
@@ -54,10 +66,10 @@ const SiteListPending:FC<Props>=({pendingSites,transmitSites,loadingData,transmi
             <Link to="/">Home</Link>
 
             <h2>Pending Sites</h2>
-            {pendingSites?.length > 0 && <Toolbar left={leftContents}/>}
+            {pendingSites?.length > 0 && <Toolbar left={leftContents} right={rightContents}/>}
 
             <DataTable ref={dt} value={pendingSites} loading={loadingData} paginator rows={100} sortMode="multiple"
-                       responsiveLayout="scroll" dataKey="id" selectionMode="checkbox" selection={selectedSites}
+                       responsiveLayout="scroll" dataKey="id" selectionMode="checkbox" selection={selectedSites} globalFilter={globalFilter}
                        onSelectionChange={(e) => handleSelection(e.value)}>
                 <Column selectionMode="multiple" headerStyle={{width: '3em'}}></Column>
                 <Column field="siteCode" header="MFL Code"></Column>

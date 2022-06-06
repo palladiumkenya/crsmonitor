@@ -2,7 +2,6 @@ import React, {FC, useEffect, useState} from "react";
 import {Site} from "../../models/site";
 import SiteService from "../../services/site-service";
 import SiteListPending from "./SiteListPending";
-import {FilterMatchMode} from "primereact/api";
 
 const service=new SiteService();
 
