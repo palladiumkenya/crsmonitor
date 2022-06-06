@@ -11,54 +11,24 @@ import {FilterMatchMode} from "primereact/api";
 interface Props {
     pendingSites: Site[];
     transmitSites: (siteCodes: any) => void;
-    loadingData: boolean
-}
-interface ActionState {
-    transmit: {
-        label: string
-        disabled: boolean
-    }
+    loadingData: boolean;
+    transmitLabel: string;
+    transmitDisabled: boolean;
 }
 
-const SiteListPending:FC<Props>=({pendingSites,transmitSites,loadingData})=> {
+const SiteListPending:FC<Props>=({pendingSites,transmitSites,loadingData,transmitLabel,transmitDisabled})=> {
     const authUser = useContext(UserContext);
     const [selectedSites, setSelectedSites] = useState<any>(null);
-    const [actionState, setActionState] = useState<ActionState>(
-        {
-            transmit:
-                {
-                    label: 'Transmit Pending',
-                    disabled: false
-                }
-        }
-    );
     const dt: any = useRef(null);
 
 
     const handleTransmit = () => {
         if (selectedSites) {
             if (selectedSites.length > 0) {
-                const transmitting:ActionState = {
-                    transmit:
-                        {
-                            label: 'Transmitting...',
-                            disabled: true
-                        }
-                }
-                setActionState({...actionState,...transmitting})
                 let siteCodes = selectedSites.map((s: Site) => (s.siteCode));
                 transmitSites(siteCodes);
-                const transmittied:ActionState ={
-                    transmit:
-                        {
-                            label: 'Transmit Pending',
-                            disabled: false
-                        }
-                }
-                setActionState({...actionState,...transmittied})
             }
         }
-
     }
 
     const handleSelection = (site: any) => {
@@ -69,8 +39,8 @@ const SiteListPending:FC<Props>=({pendingSites,transmitSites,loadingData})=> {
         <React.Fragment>
             <Button label="Export" icon="pi pi-file" onClick={() => exportCSV()} className="p-button-info"
                     data-pr-tooltip="CSV"/>
-            {'   '}
-            <Button hidden={!authUser.isAdmin} label={actionState.transmit.label} icon="pi pi-upload" className="p-button-success" disabled={actionState.transmit.disabled}
+            {'   |'}
+            <Button hidden={!authUser.isAdmin} label={transmitLabel} icon="pi pi-upload" className="p-button-success" disabled={transmitDisabled}
                     onClick={() => handleTransmit()}/>
         </React.Fragment>
     );

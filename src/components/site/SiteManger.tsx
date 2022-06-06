@@ -8,11 +8,13 @@ const service=new SiteService();
 
 const SiteManger:FC=()=> {
 
-    const [transmit, setTransmit] = useState(false);
+    const [transmit, setTransmit] = useState(Date.now());
     const [loading, setLoading] = useState<boolean>(true);
     const [errors, setErrors] = useState<string[]>([]);
     const [pendingSites, setPendingSites] = useState<Site[]>([]);
     const [siteError, setSiteError] = useState<string>('');
+    const [transmitLabel, setTransmitLabel] = useState('Transmit Pending');
+    const [transmitDisabled, setTransmitDisabled] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -28,17 +30,18 @@ const SiteManger:FC=()=> {
         })();
         return () => {
         };
-    }, []);
+    }, [transmit]);
 
 
     const onTransmitSites = async (siteCodes: any[]) => {
-        setTransmit(false);
         try {
-            console.log('generating...')
+            setTransmitLabel('Transmitting...');
+            setTransmitDisabled(true);
             await service.generateSiteTransfer();
-            console.log('sending...')
             await service.transferSites(siteCodes);
-            setTransmit(true);
+            setTransmit(Date.now());
+            setTransmitLabel('Transmit Pending');
+            setTransmitDisabled(false);
         } catch (e: any) {
             setLoading(false)
             setErrors(error => [...error, `${e.message}`]);
@@ -49,7 +52,7 @@ const SiteManger:FC=()=> {
         <div>
             {loading ? (<span>loading...</span>) : (<span></span>)}
             {errors.map((error) => (<p>{error}</p>))}
-            <SiteListPending pendingSites={pendingSites} transmitSites={onTransmitSites} loadingData={loading}/>
+            <SiteListPending pendingSites={pendingSites} transmitSites={onTransmitSites} loadingData={loading} transmitLabel={transmitLabel} transmitDisabled={transmitDisabled}/>
         </div>
     )
 }
