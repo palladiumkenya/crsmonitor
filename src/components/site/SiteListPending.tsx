@@ -42,7 +42,7 @@ const SiteListPending:FC<Props>=({pendingSites,transmitSites,loadingData,transmi
     useEffect(() => {
         const connect = new HubConnectionBuilder()
             .withUrl("http://localhost:4747/hubs/transmissionhub")
-            .configureLogging(LogLevel.Information)
+            .configureLogging(LogLevel.Error)
             .withAutomaticReconnect()
             .build();
 
@@ -55,10 +55,7 @@ const SiteListPending:FC<Props>=({pendingSites,transmitSites,loadingData,transmi
                 .start()
                 .then(() => {
                     connection.on("DisplayProgress", (progress) => {
-                        console.log(progress);
-
                         setTransmitting(true);
-
                         if (progress.area == Area.Generating) {
                             setGenProgressInfo(progress.report);
                             setGenProgress(progress.percentCompleteInt);
@@ -106,11 +103,11 @@ const SiteListPending:FC<Props>=({pendingSites,transmitSites,loadingData,transmi
                     data-pr-tooltip="CSV"/>
             {'   |'}
             <Button hidden={!authUser.isAdmin} label={transmitAllLabel} icon="pi pi-upload" className="p-button-warning"
-                    disabled={transmitAllDisabled}
+                    disabled={transmitAllDisabled || transmitting}
                     onClick={() => handleTransmitAll()}/>
             {'   |'}
             <Button hidden={!authUser.isAdmin} label={transmitLabel} icon="pi pi-upload" className="p-button-success"
-                    disabled={transmitDisabled}
+                    disabled={transmitDisabled || transmitting}
                     onClick={() => handleTransmit()}/>
 
 
@@ -136,10 +133,10 @@ const SiteListPending:FC<Props>=({pendingSites,transmitSites,loadingData,transmi
             {transmitting &&
                 <div>
                     {'Stage 1: '}{genProgressInfo}
-                    <ProgressBar value={genProgress} color="orange"></ProgressBar>
+                    <ProgressBar value={genProgress} color="yellow"></ProgressBar>
                     <br/>
                     {'Stage 2: '}{processProgressInfo}
-                    <ProgressBar value={processProgress} color="orange"></ProgressBar>
+                    <ProgressBar value={processProgress} color="yellow"></ProgressBar>
                     <br/>
                     {'Stage 3: '}{transmitProgressInfo}
                     <ProgressBar value={transmitProgress} color="orange"></ProgressBar>

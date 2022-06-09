@@ -55,11 +55,13 @@ const SiteManger:FC=()=> {
         try {
             setTransmitAllLabel('Transmitting All...')
             setTransmitAllDisabled(true);
+            setTransmitDisabled(true);
             await service.generateSiteTransfer();
             await service.transferAllSites();
             setTransmit(Date.now());
             setTransmitAllLabel('Transmit All');
             setTransmitAllDisabled(false);
+            setTransmitDisabled(false);
         } catch (e: any) {
             setLoading(false)
             setErrors(error => [...error, `${e.message}`]);
