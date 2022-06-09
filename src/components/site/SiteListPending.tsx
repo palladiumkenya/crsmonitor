@@ -41,7 +41,7 @@ const SiteListPending:FC<Props>=({pendingSites,transmitSites,loadingData,transmi
 
     useEffect(() => {
         const connect = new HubConnectionBuilder()
-            .withUrl("http://localhost:4747/hubs/transmissionhub")
+            .withUrl(`${process.env.REACT_APP_CRS_HUB_URL}/transmissionhub`)
             .configureLogging(LogLevel.Error)
             .withAutomaticReconnect()
             .build();
