@@ -65,7 +65,7 @@ const SiteListTransmitted:FC<Props>=({transmittedSites,loadError,loadingData})=>
 
     return (
         <>
-            <Link to="/manage">Mangage</Link>
+            <Link to="/manage">Manage</Link>
             <h2>Transmitted Sites</h2>
             <Toolbar left={leftContents} right={rightContents}/>
             <DataTable ref={dt} value={transmittedSites} loading={loadingData} globalFilter={globalFilter} paginator

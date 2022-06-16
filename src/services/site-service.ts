@@ -27,6 +27,10 @@ class SiteService {
         return this.client.get<Site[]>('/App/TransmissionReport')
     }
 
+    getFailedSites(): Promise<AxiosResponse<Site[]>> {
+        return this.client.get<Site[]>('/App/FailedReport')
+    }
+
     async generateSiteTransfer(): Promise<AxiosResponse> {
         return  this.client.post('/App/Generate');
     }
@@ -38,6 +42,11 @@ class SiteService {
     transferSites(siteCodes:number[]): Promise<AxiosResponse> {
         const body={siteCodes}
         return this.client.post<number[]>('/App/DumpSite',body)
+    }
+
+    reTransferSites(siteCodes:number[]): Promise<AxiosResponse> {
+        const body={siteCodes}
+        return this.client.post<number[]>('/App/DumpFailedSite',body)
     }
 
     getTransmittedSiteError(siteCode: string | undefined): Promise<AxiosResponse<TransmittedSite>> {

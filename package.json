@@ -1,6 +1,6 @@
 {
   "name": "crsmonitor",
-  "version": "1.0.0.3",
+  "version": "1.0.4",
   "private": true,
   "dependencies": {
     "@microsoft/signalr": "^6.0.5",
