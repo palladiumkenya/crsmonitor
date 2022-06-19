@@ -1,6 +1,6 @@
 {
   "name": "crsmonitor",
-  "version": "1.0.0.1",
+  "version": "1.0.5",
   "private": true,
   "dependencies": {
     "@microsoft/signalr": "^6.0.5",
@@ -12,10 +12,11 @@
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.5",
     "axios": "^0.27.2",
+    "env-cmd": "^10.1.0",
     "oidc-client": "^1.11.5",
     "primeflex": "^3.2.0",
     "primeicons": "^5.0.0",
-    "primereact": "^8.1.1",
+    "primereact": "^8.0.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-router": "^6.3.0",
@@ -28,6 +29,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:staging": "env-cmd -f .env.staging react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
