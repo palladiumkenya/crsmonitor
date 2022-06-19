@@ -3,7 +3,6 @@ import {Site} from "../../models/site";
 import SiteService from "../../services/site-service";
 import SiteListTransmitted from "./SiteListTransmitted";
 import {useNavigate } from "react-router-dom";
-import {FilterMatchMode} from "primereact/api";
 
 const service=new SiteService();
 
@@ -13,14 +12,6 @@ const SiteReport:FC=()=> {
     const [errors, setErrors] = useState<string[]>([]);
     const [siteError, setSiteError] = useState<string>('');
     const [transmittedSites, setTransmittedSites] = useState<Site[]>([]);
-    const [filtersData, setFiltersData] = useState({
-        'siteCode': { value: '', matchMode: FilterMatchMode.EQUALS },
-        'name': { value: '', matchMode: FilterMatchMode.CONTAINS },
-        'county': { value: '', matchMode: FilterMatchMode.CONTAINS },
-        'agency': { value: '', matchMode: FilterMatchMode.CONTAINS },
-        'partner': { value: '', matchMode: FilterMatchMode.EQUALS }
-    });
-
 
     useEffect(() => {
         (async () => {

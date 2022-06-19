@@ -13,28 +13,25 @@ import {AppProgress} from "../../models/app-progress";
 import {Area} from "../../models/area";
 
 interface Props {
-    pendingSites: Site[];
-    transmitSites: (siteCodes: any) => void;
-    transmitAll: () => void;
+    failedSites: Site[];
+    reTransmitSites: (siteCodes: any) => void;
     loadingData: boolean;
-    transmitLabel: string;
-    transmitDisabled: boolean;
-    transmitAllLabel: string;
-    transmitAllDisabled: boolean;
+    reTransmitLabel: string;
+    reTransmitDisabled: boolean
 }
 
-const SiteListPending:FC<Props>=({pendingSites,transmitSites,loadingData,transmitLabel,transmitDisabled,transmitAllLabel,transmitAllDisabled,transmitAll})=> {
+const SiteListFailed:FC<Props>=({failedSites,reTransmitSites,loadingData,reTransmitLabel,reTransmitDisabled})=> {
     const authUser = useContext(UserContext);
     const [selectedSites, setSelectedSites] = useState<any>(null);
     const dt: any = useRef(null);
     const [globalFilter, setGlobalFilter] = useState<string>();
-    const [transmitting, setTransmitting] = useState<boolean>(false);
+    const [reTransmitting, setReTransmitting] = useState<boolean>(false);
     const [genProgress, setGenProgress] = useState<number>(0);
     const [genProgressInfo, setGenProgressInfo] = useState<string>('');
     const [processProgress, setProcessProgress] = useState<number>(0);
     const [processProgressInfo, setProcessProgressInfo] = useState<string>('');
-    const [transmitProgress, setTransmitProgress] = useState<number>(0);
-    const [transmitProgressInfo, setTransmitProgressInfo] = useState<string>('');
+    const [reTransmitProgress, setReTransmitProgress] = useState<number>(0);
+    const [reTransmitProgressInfo, setReTransmitProgressInfo] = useState<string>('');
 
     const [connection, setConnection] = useState<null | HubConnection>(null);
 
@@ -55,20 +52,10 @@ const SiteListPending:FC<Props>=({pendingSites,transmitSites,loadingData,transmi
                 .start()
                 .then(() => {
                     connection.on("DisplayProgress", (progress) => {
-                        setTransmitting(true);
-                        if (progress.area == Area.Generating) {
-                            setGenProgressInfo(progress.report);
-                            setGenProgress(progress.percentCompleteInt);
-                        }
-
-                        if (progress.area == Area.Processing) {
-                            setProcessProgressInfo(progress.report);
-                            setProcessProgress(progress.percentCompleteInt);
-                        }
-
-                        if (progress.area == Area.Transmitting) {
-                            setTransmitProgressInfo(progress.report);
-                            setTransmitProgress(progress.percentCompleteInt);
+                        setReTransmitting(true);
+                        if (progress.area == Area.ReTransmitting) {
+                            setReTransmitProgressInfo(progress.report);
+                            setReTransmitProgress(progress.percentCompleteInt);
                         }
                     });
                 })
@@ -76,15 +63,11 @@ const SiteListPending:FC<Props>=({pendingSites,transmitSites,loadingData,transmi
         }
     }, [connection]);
 
-    const handleTransmitAll = () => {
-        transmitAll();
-    }
-
-    const handleTransmit = () => {
+    const handleReTransmit = () => {
         if (selectedSites) {
             if (selectedSites.length > 0) {
                 let siteCodes = selectedSites.map((s: Site) => (s.siteCode));
-                transmitSites(siteCodes);
+                reTransmitSites(siteCodes);
             }
         }
     }
@@ -102,15 +85,9 @@ const SiteListPending:FC<Props>=({pendingSites,transmitSites,loadingData,transmi
             <Button label="Export" icon="pi pi-file" onClick={() => exportCSV()} className="p-button-info"
                     data-pr-tooltip="CSV"/>
             {'   |'}
-            <Button hidden={!authUser.isAdmin} label={transmitAllLabel} icon="pi pi-upload" className="p-button-warning"
-                    disabled={transmitAllDisabled || transmitting}
-                    onClick={() => handleTransmitAll()}/>
-            {'   |'}
-            <Button hidden={!authUser.isAdmin} label={transmitLabel} icon="pi pi-upload" className="p-button-success"
-                    disabled={transmitDisabled || transmitting}
-                    onClick={() => handleTransmit()}/>
-
-
+            <Button hidden={!authUser.isAdmin} label={reTransmitLabel} icon="pi pi-upload" className="p-button-success"
+                    disabled={reTransmitDisabled || reTransmitting}
+                    onClick={() => handleReTransmit()}/>
         </React.Fragment>
     );
 
@@ -128,24 +105,18 @@ const SiteListPending:FC<Props>=({pendingSites,transmitSites,loadingData,transmi
 
     return (
         <>
-            <h2>Pending Sites</h2>
-            {transmitting &&
+            <h2>Failed Sites</h2>
+            {reTransmitting &&
                 <div>
-                    {'Stage 1: '}{genProgressInfo}
-                    <ProgressBar value={genProgress} color="yellow"></ProgressBar>
-                    <br/>
-                    {'Stage 2: '}{processProgressInfo}
-                    <ProgressBar value={processProgress} color="yellow"></ProgressBar>
-                    <br/>
-                    {'Stage 3: '}{transmitProgressInfo}
-                    <ProgressBar value={transmitProgress} color="orange"></ProgressBar>
+                    {reTransmitProgressInfo}
+                    <ProgressBar value={reTransmitProgress} color="orange"></ProgressBar>
                     <br/>
                 </div>
             }
 
-            {pendingSites?.length > 0 && <Toolbar left={leftContents} right={rightContents}/>}
+            {failedSites?.length > 0 && <Toolbar left={leftContents} right={rightContents}/>}
 
-            <DataTable ref={dt} value={pendingSites} loading={loadingData} paginator rows={100} sortMode="multiple"
+            <DataTable ref={dt} value={failedSites} loading={loadingData} paginator rows={100} sortMode="multiple"
                        responsiveLayout="scroll" dataKey="id" selectionMode="checkbox" selection={selectedSites}
                        globalFilter={globalFilter}
                        onSelectionChange={(e) => handleSelection(e.value)}>
@@ -163,4 +134,4 @@ const SiteListPending:FC<Props>=({pendingSites,transmitSites,loadingData,transmi
     )
 }
 
-export default SiteListPending;
+export default SiteListFailed;
