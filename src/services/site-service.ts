@@ -2,6 +2,7 @@ import {Site} from "../models/site";
 import axios, {AxiosInstance, AxiosResponse} from "axios";
 import {TransmittedSite} from "../models/transmitted-site";
 import UserService from "./user-service";
+import {SiteDuplicate} from "../models/site-duplicate";
 
 class SiteService {
     client: AxiosInstance;
@@ -31,6 +32,10 @@ class SiteService {
         return this.client.get<Site[]>('/App/FailedReport')
     }
 
+    getDuplicateSites(): Promise<AxiosResponse<SiteDuplicate[]>> {
+        return this.client.get<SiteDuplicate[]>('/App/DuplicateSummary')
+    }
+
     async generateSiteTransfer(): Promise<AxiosResponse> {
         return  this.client.post('/App/Generate');
     }
@@ -47,6 +52,11 @@ class SiteService {
     reTransferSites(siteCodes:number[]): Promise<AxiosResponse> {
         const body={siteCodes}
         return this.client.post<number[]>('/App/DumpFailedSite',body)
+    }
+
+    deduplcateSites(sites:SiteDuplicate[]): Promise<AxiosResponse> {
+        const body={sites: sites}
+        return this.client.post<number[]>('/App/DeDuplicateSite',body)
     }
 
     getTransmittedSiteError(siteCode: string | undefined): Promise<AxiosResponse<TransmittedSite>> {
