@@ -53,7 +53,7 @@ const App=()=> {
                 <Routes>
                     <Route path="/" element={<SiteReport/>}/>
                     <Route path="/site/:siteCode" element={<SiteShowcase/>}/>
-                    <Route path="/manage" element={<SiteManger/>}/>
+                    <Route path="/manage/private/route/a2343ec2-7aa1-46a6-ba9e-0e26409f3a8c" element={<SiteManger/>}/>
                 </Routes>
             </BrowserRouter>
             <Footer/>
