@@ -8,6 +8,8 @@ import SiteShowcase from "./site/SiteShowcase";
 import SiteReport from "./site/SiteReport";
 import UserService from "../services/user-service";
 import {getRoles} from "@testing-library/react";
+import { Auth0Provider } from "@auth0/auth0-react";
+import SignInoIdc from "./site/SignInOidc";
 
 export interface AuthUser {
     userName?:string,
@@ -47,17 +49,27 @@ const App=()=> {
     },[]);
 
     return (
+        <Auth0Provider
+            domain="dev-g7ipfo7nhnq68xtm.us.auth0.com"
+            clientId="yWMUkKOqvL28hdJXjY1ZXnws09WQxGyK"
+            redirectUri="https://127.0.0.1:3000/signin-oidc"
+        >
         <UserContext.Provider value={authUser}>
             <Header/>
             <BrowserRouter basename={process.env.REACT_APP_CRS_BASENAME}>
+
                 <Routes>
                     <Route path="/" element={<SiteReport/>}/>
                     <Route path="/site/:siteCode" element={<SiteShowcase/>}/>
-                    <Route path="/manage/private/route/a2343ec2-7aa1-46a6-ba9e-0e26409f3a8c" element={<SiteManger/>}/>
+                    <Route path="/manage" element={<SiteManger/>}/>
+
+                    <Route path="/signin-oidc" element={<SignInoIdc/>}/>
                 </Routes>
             </BrowserRouter>
             <Footer/>
         </UserContext.Provider>
+        </Auth0Provider>
+
     );
 }
 

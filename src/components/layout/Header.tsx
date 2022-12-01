@@ -3,12 +3,14 @@ import UserService from "../../services/user-service";
 import {User} from "oidc-client";
 import {Button} from "primereact/button";
 import {UserContext} from "../App";
+import {Auth0Provider, useAuth0} from "@auth0/auth0-react";
+
 
 const scv=new UserService();
 
 const Header=()=> {
     const authUser = useContext(UserContext);
-
+    const { loginWithRedirect, logout,isAuthenticated, user } = useAuth0();
     /*const [user,setUser]=useState<User>()
     useEffect(()=>{
         (async ()=>{
@@ -30,11 +32,11 @@ const Header=()=> {
     },[])*/
 
     const UserInfo=()=>{
-        if(authUser.isAuthenticated)
+        if(isAuthenticated)
         {
-            return <Button onClick={()=>scv.logout()}> Log Out {authUser.userName}</Button>
+            return <Button onClick={()=>logout({ returnTo: window.location.origin })}> Log Out {user && user.name} </Button>
         }
-        return <Button onClick={()=>scv.login()}>Log In</Button>
+        return <Button onClick={()=>loginWithRedirect()}>Log In</Button>
     }
 
     return (
