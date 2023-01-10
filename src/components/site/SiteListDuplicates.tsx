@@ -1,17 +1,14 @@
-import React, {FC, FormEvent, useContext, useEffect, useRef, useState} from "react";
-import {Site} from "../../models/site";
+import React, {FC, FormEvent, useEffect, useRef, useState} from "react";
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 import {Button} from "primereact/button";
 import {Toolbar} from "primereact/toolbar";
-import {UserContext} from "../App";
-import {Link} from "react-router-dom";
 import {InputText} from "primereact/inputtext";
 import {ProgressBar} from "primereact/progressbar";
 import {HubConnection, HubConnectionBuilder, LogLevel} from "@microsoft/signalr";
-import {AppProgress} from "../../models/app-progress";
 import {Area} from "../../models/area";
 import {SiteDuplicate} from "../../models/site-duplicate";
+import {useAuth0} from "@auth0/auth0-react";
 
 interface Props {
     duplicateSites: SiteDuplicate[];
@@ -22,7 +19,7 @@ interface Props {
 }
 
 const SiteListDuplicates:FC<Props>=({duplicateSites,deDuplicateSites,loadingData,deDuplicateLabel,deDuplicateDisabled})=> {
-    const authUser = useContext(UserContext);
+    const {isAuthenticated} = useAuth0();
     const [selectedSites, setSelectedSites] = useState<any>(null);
     const dt: any = useRef(null);
     const [globalFilter, setGlobalFilter] = useState<string>();
@@ -85,7 +82,7 @@ const SiteListDuplicates:FC<Props>=({duplicateSites,deDuplicateSites,loadingData
             <Button label="Export" icon="pi pi-file" onClick={() => exportCSV()} className="p-button-info"
                     data-pr-tooltip="CSV"/>
             {'   |'}
-            <Button hidden={!authUser.isAdmin} label={deDuplicateLabel} icon="pi pi-upload" className="p-button-success"
+            <Button hidden={!isAuthenticated} label={deDuplicateLabel} icon="pi pi-upload" className="p-button-success"
                     disabled={deDuplicateDisabled || deDuplicating}
                     onClick={() => handleDeDuplicate()}/>
         </React.Fragment>

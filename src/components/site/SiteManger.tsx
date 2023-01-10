@@ -1,4 +1,4 @@
-import React, {FC, useContext, useEffect, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {Site} from "../../models/site";
 import SiteService from "../../services/site-service";
 import SiteListPending from "./SiteListPending";
@@ -7,12 +7,12 @@ import {Link} from "react-router-dom";
 import SiteListFailed from "./SiteListFailed";
 import {SiteDuplicate} from "../../models/site-duplicate";
 import SiteListDuplicates from "./SiteListDuplicates";
-import {UserContext} from "../App";
+import {useAuth0} from "@auth0/auth0-react";
 
 const service=new SiteService();
 
 const SiteManger:FC=()=> {
-    const authUser = useContext(UserContext);
+    const {isAuthenticated,getAccessTokenSilently} = useAuth0();
     const [transmit, setTransmit] = useState(Date.now());
     const [reTransmit, setReTransmit] = useState(Date.now());
     const [deDuplicate, setDeDuplicate] = useState(Date.now());
@@ -86,11 +86,12 @@ const SiteManger:FC=()=> {
 
     const onTransmitSites = async (siteCodes: any[]) => {
         try {
+            const accessToken:any = await getAccessTokenSilently()
             setTransmitLabel('Transmitting Selected...');
             setTransmitDisabled(true);
             setTransmitAllDisabled(true);
-            await service.generateSiteTransfer();
-            await service.transferSites(siteCodes);
+            await service.generateSiteTransfer(accessToken);
+            await service.transferSites(siteCodes,accessToken);
             setTransmit(Date.now());
             setTransmitLabel('Transmit Selected');
             setTransmitDisabled(false);
@@ -103,11 +104,12 @@ const SiteManger:FC=()=> {
 
     const onTransmitAll = async () => {
         try {
+            const accessToken:any = await getAccessTokenSilently()
             setTransmitAllLabel('Transmitting All...')
             setTransmitAllDisabled(true);
             setTransmitDisabled(true);
-            await service.generateSiteTransfer();
-            await service.transferAllSites();
+            await service.generateSiteTransfer(accessToken);
+            await service.transferAllSites(accessToken);
             setTransmit(Date.now());
             setTransmitAllLabel('Transmit All');
             setTransmitAllDisabled(false);
@@ -120,10 +122,11 @@ const SiteManger:FC=()=> {
 
     const onReTransmitSites = async (siteCodes: any[]) => {
         try {
+            const accessToken:any = await getAccessTokenSilently()
             setReTransmitLabel('Re-Transmitting Selected...');
             setReTransmitDisabled(true);
 
-            await service.reTransferSites(siteCodes);
+            await service.reTransferSites(siteCodes,accessToken);
 
             setReTransmit(Date.now());
             setReTransmitLabel('Re-Transmit Selected');
@@ -136,10 +139,11 @@ const SiteManger:FC=()=> {
 
     const onDeDuplicateSites = async (sites: any[]) => {
         try {
+            const accessToken:any = await getAccessTokenSilently()
             setDeDupLabel('De-Duplicating Selected...');
             setDeDupDisabled(true);
 
-            await service.deduplcateSites(sites);
+            await service.deduplcateSites(sites,accessToken);
 
             setDeDuplicate(Date.now());
             setDeDupLabel('De-Duplicate Selected');
@@ -165,7 +169,7 @@ const SiteManger:FC=()=> {
                 <TabPanel header="Failed">
                     <SiteListFailed failedSites={failedSites} reTransmitSites={onReTransmitSites} loadingData={reTransLoading} reTransmitLabel={reTransmitLabel} reTransmitDisabled={reTransmitDisabled}/>
                 </TabPanel>
-                {authUser.isAdmin &&
+                {isAuthenticated &&
                     <TabPanel header="Duplicates">
                     <SiteListDuplicates duplicateSites={duplicateSites} deDuplicateSites={onDeDuplicateSites} loadingData={deDupLoading} deDuplicateLabel={deDupLabel} deDuplicateDisabled={deDupDisabled}/>
                     </TabPanel>
