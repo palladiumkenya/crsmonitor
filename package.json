@@ -1,8 +1,9 @@
 {
   "name": "crsmonitor",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "private": true,
   "dependencies": {
+    "@auth0/auth0-react": "^1.12.0",
     "@microsoft/signalr": "^6.0.5",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
@@ -13,7 +14,6 @@
     "@types/react-dom": "^18.0.5",
     "axios": "^0.27.2",
     "env-cmd": "^10.1.0",
-    "oidc-client": "^1.11.5",
     "primeflex": "^3.2.0",
     "primeicons": "^5.0.0",
     "primereact": "^8.0.0",
@@ -27,7 +27,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "SET HTTPS=true&&react-scripts start",
     "build": "react-scripts build",
     "build:staging": "env-cmd -f .env.staging react-scripts build",
     "test": "react-scripts test",

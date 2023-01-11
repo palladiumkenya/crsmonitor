@@ -1,23 +1,16 @@
 import {Site} from "../models/site";
 import axios, {AxiosInstance, AxiosResponse} from "axios";
 import {TransmittedSite} from "../models/transmitted-site";
-import UserService from "./user-service";
 import {SiteDuplicate} from "../models/site-duplicate";
+import {ServerInfo} from "../models/server-info";
 
 class SiteService {
     client: AxiosInstance;
 
     constructor() {
         this.client = axios.create({
-            baseURL:process.env.REACT_APP_CRS_API_URL
+            baseURL: process.env.REACT_APP_CRS_API_URL
         });
-        let userService=new UserService();
-        userService.getUser().then(user => {
-            if (user && !user.expired) {
-                this.client.defaults.headers.common['Authorization'] = 'Bearer ' + user.access_token;
-            }
-        });
-
     }
 
     getPendingSites(): Promise<AxiosResponse<Site[]>> {
@@ -36,25 +29,40 @@ class SiteService {
         return this.client.get<SiteDuplicate[]>('/App/DuplicateSummary')
     }
 
-    async generateSiteTransfer(): Promise<AxiosResponse> {
+    async generateSiteTransfer(token: string | undefined): Promise<AxiosResponse> {
+        if (token) {
+            this.client.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+        }
         return  this.client.post('/App/Generate');
     }
 
-    transferAllSites(): Promise<AxiosResponse> {
+    transferAllSites(token: string | undefined): Promise<AxiosResponse> {
+        if (token) {
+            this.client.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+        }
         return this.client.post('/App/DumpAll')
     }
 
-    transferSites(siteCodes:number[]): Promise<AxiosResponse> {
+    transferSites(siteCodes:number[],token: string | undefined): Promise<AxiosResponse> {
+        if (token) {
+            this.client.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+        }
         const body={siteCodes}
         return this.client.post<number[]>('/App/DumpSite',body)
     }
 
-    reTransferSites(siteCodes:number[]): Promise<AxiosResponse> {
+    reTransferSites(siteCodes:number[],token: string | undefined): Promise<AxiosResponse> {
+        if (token) {
+            this.client.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+        }
         const body={siteCodes}
         return this.client.post<number[]>('/App/DumpFailedSite',body)
     }
 
-    deduplcateSites(sites:SiteDuplicate[]): Promise<AxiosResponse> {
+    deduplcateSites(sites:SiteDuplicate[],token: string | undefined): Promise<AxiosResponse> {
+        if (token) {
+            this.client.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+        }
         const body={sites: sites}
         return this.client.post<number[]>('/App/DeDuplicateSite',body)
     }
@@ -62,6 +70,11 @@ class SiteService {
     getTransmittedSiteError(siteCode: string | undefined): Promise<AxiosResponse<TransmittedSite>> {
         return this.client.get<TransmittedSite>(`/App/ErrorReport/${siteCode}`)
     }
+
+    getServerInfo(): Promise<AxiosResponse<ServerInfo>> {
+        return this.client.get<ServerInfo>('/App/Status')
+    }
+
 }
 
 export default SiteService;
