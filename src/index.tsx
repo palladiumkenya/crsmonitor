@@ -10,18 +10,24 @@ import "./favicon.ico";
 
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-import SiteShowcase from "./components/site/SiteShowcase";
-import Header from "./components/layout/Header";
-import Footer from "./components/layout/Footer";
+import {Auth0Provider} from '@auth0/auth0-react';
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+    document.getElementById('root') as HTMLElement
 );
+
 root.render(
-  <React.StrictMode>
-      <App/>
-  </React.StrictMode>
+    <React.StrictMode>
+        <Auth0Provider
+            domain={process.env.REACT_APP_AUTH0_DOMAIN ? process.env.REACT_APP_AUTH0_DOMAIN : ''}
+            clientId={process.env.REACT_APP_AUTH0_CLIENT_ID ? process.env.REACT_APP_AUTH0_CLIENT_ID : ''}
+            audience={process.env.REACT_APP_AUTH0_AUDIENCE ? process.env.REACT_APP_AUTH0_AUDIENCE : ''}
+            scope={process.env.REACT_APP_AUTH0_SCOPE ? process.env.REACT_APP_AUTH0_SCOPE : ''}
+            redirectUri={process.env.REACT_APP_CRS_REDIRECT_URI ? process.env.REACT_APP_CRS_REDIRECT_URI : window.location.origin}
+        >
+            <App/>
+        </Auth0Provider>
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

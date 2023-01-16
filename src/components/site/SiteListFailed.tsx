@@ -4,13 +4,11 @@ import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 import {Button} from "primereact/button";
 import {Toolbar} from "primereact/toolbar";
-import {UserContext} from "../App";
-import {Link} from "react-router-dom";
 import {InputText} from "primereact/inputtext";
 import {ProgressBar} from "primereact/progressbar";
 import {HubConnection, HubConnectionBuilder, LogLevel} from "@microsoft/signalr";
-import {AppProgress} from "../../models/app-progress";
 import {Area} from "../../models/area";
+import {useAuth0} from "@auth0/auth0-react";
 
 interface Props {
     failedSites: Site[];
@@ -21,7 +19,7 @@ interface Props {
 }
 
 const SiteListFailed:FC<Props>=({failedSites,reTransmitSites,loadingData,reTransmitLabel,reTransmitDisabled})=> {
-    const authUser = useContext(UserContext);
+    const {isAuthenticated} = useAuth0();
     const [selectedSites, setSelectedSites] = useState<any>(null);
     const dt: any = useRef(null);
     const [globalFilter, setGlobalFilter] = useState<string>();
@@ -85,7 +83,7 @@ const SiteListFailed:FC<Props>=({failedSites,reTransmitSites,loadingData,reTrans
             <Button label="Export" icon="pi pi-file" onClick={() => exportCSV()} className="p-button-info"
                     data-pr-tooltip="CSV"/>
             {'   |'}
-            <Button hidden={!authUser.isAdmin} label={reTransmitLabel} icon="pi pi-upload" className="p-button-success"
+            <Button hidden={!isAuthenticated} label={reTransmitLabel} icon="pi pi-upload" className="p-button-success"
                     disabled={reTransmitDisabled || reTransmitting}
                     onClick={() => handleReTransmit()}/>
         </React.Fragment>

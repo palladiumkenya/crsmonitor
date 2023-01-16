@@ -4,13 +4,11 @@ import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 import {Button} from "primereact/button";
 import {Toolbar} from "primereact/toolbar";
-import {UserContext} from "../App";
-import {Link} from "react-router-dom";
 import {InputText} from "primereact/inputtext";
 import {ProgressBar} from "primereact/progressbar";
 import {HubConnection, HubConnectionBuilder, LogLevel} from "@microsoft/signalr";
-import {AppProgress} from "../../models/app-progress";
 import {Area} from "../../models/area";
+import {useAuth0} from "@auth0/auth0-react";
 
 interface Props {
     pendingSites: Site[];
@@ -24,7 +22,7 @@ interface Props {
 }
 
 const SiteListPending:FC<Props>=({pendingSites,transmitSites,loadingData,transmitLabel,transmitDisabled,transmitAllLabel,transmitAllDisabled,transmitAll})=> {
-    const authUser = useContext(UserContext);
+    const {isAuthenticated} = useAuth0();
     const [selectedSites, setSelectedSites] = useState<any>(null);
     const dt: any = useRef(null);
     const [globalFilter, setGlobalFilter] = useState<string>();
@@ -102,11 +100,11 @@ const SiteListPending:FC<Props>=({pendingSites,transmitSites,loadingData,transmi
             <Button label="Export" icon="pi pi-file" onClick={() => exportCSV()} className="p-button-info"
                     data-pr-tooltip="CSV"/>
             {'   |'}
-            <Button hidden={!authUser.isAdmin} label={transmitAllLabel} icon="pi pi-upload" className="p-button-warning"
+            <Button hidden={!isAuthenticated} label={transmitAllLabel} icon="pi pi-upload" className="p-button-warning"
                     disabled={transmitAllDisabled || transmitting}
                     onClick={() => handleTransmitAll()}/>
             {'   |'}
-            <Button hidden={!authUser.isAdmin} label={transmitLabel} icon="pi pi-upload" className="p-button-success"
+            <Button hidden={!isAuthenticated} label={transmitLabel} icon="pi pi-upload" className="p-button-success"
                     disabled={transmitDisabled || transmitting}
                     onClick={() => handleTransmit()}/>
 

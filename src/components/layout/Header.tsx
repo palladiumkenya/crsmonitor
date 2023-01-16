@@ -1,40 +1,17 @@
-import React, {useContext, useEffect, useState} from "react";
-import UserService from "../../services/user-service";
-import {User} from "oidc-client";
+import React from "react";
 import {Button} from "primereact/button";
-import {UserContext} from "../App";
+import {useAuth0} from "@auth0/auth0-react";
 
-const scv=new UserService();
+const Header = () => {
 
-const Header=()=> {
-    const authUser = useContext(UserContext);
+    const {user, isAuthenticated, loginWithRedirect, logout} = useAuth0();
 
-    /*const [user,setUser]=useState<User>()
-    useEffect(()=>{
-        (async ()=>{
-
-            const scv=new UserService();
-
-            if (scv.isAuthenticated()){
-                const loggedInUser=await scv.getUser()
-                console.log('>>',loggedInUser);
-                if (loggedInUser)
-                {
-                    setUser(loggedInUser);
-                    console.log('USERS',loggedInUser);
-                }
-            }
-        })();
-        return () => {
-        };
-    },[])*/
-
-    const UserInfo=()=>{
-        if(authUser.isAuthenticated)
-        {
-            return <Button onClick={()=>scv.logout()}> Log Out {authUser.userName}</Button>
+    const UserInfo = () => {
+        if (isAuthenticated) {
+            return <Button onClick={() => logout({returnTo: window.location.origin})}> Log
+                Out {user && user.name} </Button>
         }
-        return <Button onClick={()=>scv.login()}>Log In</Button>
+        return <Button onClick={() => loginWithRedirect()}>Log In</Button>
     }
 
     return (
@@ -42,7 +19,6 @@ const Header=()=> {
             <h1>DWAPI Client Registry Upload Tracker</h1>
             <UserInfo/>
             <hr/>
-
         </header>)
 }
 export default Header;
